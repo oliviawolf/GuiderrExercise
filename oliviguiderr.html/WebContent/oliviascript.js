@@ -110,18 +110,21 @@
     	   
     	   //creates listeners for when a marker is hovered over or clicked on
     	   function iconFunctionality(place, marker){
-    		   
-    		   //if a marker is clicked, ask user to input email
-               google.maps.event.addListener(marker, 'click', function() {
-                   prompt('please enter your email to recieve information about this restaurant');
-                 });
-                
-              //create info window variable
+    		    //create info window variable
                 var infowindow = new google.maps.InfoWindow();
 
                 //call method that creates a string of html to output to infowindow
                 var infoWContent = getContent(place);
               
+    		   //if a marker is clicked, ask user to input email
+               google.maps.event.addListener(marker, 'click', function() {
+                   var email = prompt('please enter your email to recieve information about this restaurant');
+                   window.open('mailto:'+ email + '?subject=\'Restaurant search info\'&body='+infoWContent);
+                 });
+               
+               
+                
+             
               //if icon is hovered over, display the restaurant details in an infowindow
                 google.maps.event.addListener(marker, 'mouseover', function() {
                     infowindow.setContent(infoWContent);
