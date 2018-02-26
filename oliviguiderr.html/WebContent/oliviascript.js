@@ -46,6 +46,11 @@
 
           map.fitBounds(bounds);
           
+          //zoom map into city when bounds ar changed
+          google.maps.event.addListenerOnce(map, 'bounds_changed', function() {
+        	  map.setZoom(13);
+        	});
+          
         //update restaurant icons when a new search is performed  
         createIcons(map);
         });
@@ -113,23 +118,13 @@
                 
               //create info window variable
                 var infowindow = new google.maps.InfoWindow();
-               
-              //initialize and fill content variable with restaurant details
-              var content= '<p>'+ place.name +'\n<p><\p>Phone number: '+ place.formatted_phone_number +'\n<p><\p>';
-              content += place.formatted_address +'\n<p><\p>Rating: '+place.rating +'\n<p><\p>';
-              content += place.website;
-              
-              //check if the getDetails function returned any photos, if so add them to the content
-              if(place.photos.length>0){
-              content+= '\n<p><\p> <img src=\''+ place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200}) + '\'<p>';
-              }
-              else{
-            	  content+='<\p>';
-              }
+
+                //call method that creates a string of html to output to infowindow
+                var infoWContent = getContent(place);
               
               //if icon is hovered over, display the restaurant details in an infowindow
                 google.maps.event.addListener(marker, 'mouseover', function() {
-                    infowindow.setContent(content);
+                    infowindow.setContent(infoWContent);
                     infowindow.open(map, this);
                   });
                 //when mouse leaves icon, close infowindow
@@ -137,3 +132,19 @@
                     infowindow.close(map, this);
                   });
            }
+    	   
+    	   function getContent(place){
+    		   var content= '<p>'+ place.name +'\n<p><\p>Phone number: '+ place.formatted_phone_number +'\n<p><\p>';
+               content += place.formatted_address +'\n<p><\p>Rating: '+place.rating +'\n<p><\p>';
+               content += place.website;
+               
+               //check if the getDetails function returned any photos, if so add them to the content
+               if(place.photos.length>0){
+               content+= '\n<p><\p> <img src=\''+ place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200}) + '\'<p>';
+               }
+               else{
+             	  content+='<\p>';
+               }
+               
+               return content;
+    	   }
