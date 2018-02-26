@@ -169,8 +169,6 @@
           map.fitBounds(bounds);
        
         
-        
-        
         createIcons(map);
        
         });
@@ -193,45 +191,66 @@
        function callback1(results, status) {
     	      if (status === google.maps.places.PlacesServiceStatus.OK) {
     	        for (var i = 0; i < results.length; i++) {
-    	          createMarker(results[i]);
+    	        	var requestdeets = {
+                            placeId: results[i].place_id
+                    };
+                    
+                    service2 = new google.maps.places.PlacesService(map);
+                    service2.getDetails(requestdeets, callback2);
     	        }
     	      }
     	    }
+    	   
+    	   
+    	   function callback2(place, status){
+    		   if (status === google.maps.places.PlacesServiceStatus.OK) {
+    			    createMarker2(place);
+    			  }
+    	   }
+    	   function createMarker2(place){
+    		   var restaurantIcon = {
+    	                  url: 'rest.png',
+    	                   scaledSize: new google.maps.Size(35, 35)
+    	              };
+    	              
+    	              marker = new google.maps.Marker({
+    	                map: map,
+    	                position: place.geometry.location,
+    	                animation: google.maps.Animation.DROP,
+    	                icon: restaurantIcon
+    	              });
 
-    	    function createMarker(place) {
-    	      var restaurantIcon = {
-    	    	  url: 'rest.png',
-    	    	   scaledSize: new google.maps.Size(35, 35)
-    	      };
-    	      
-    	     
-    	      marker = new google.maps.Marker({
-    	        map: map,
-    	        position: place.geometry.location,
-    	        animation: google.maps.Animation.DROP,
-    	        icon: restaurantIcon
-    	      });
-
-    	    iconFunctionality(place, marker);
-    	    }
+    	            iconFunctionality(place, marker);
+    	   }
+    	   
     	   function iconFunctionality(place, marker){
-    		   google.maps.event.addListener(marker, 'click', function() {
+               google.maps.event.addListener(marker, 'click', function() {
                    prompt('please enter your email to recieve information about this restaurant');
                   
                  });
                 
               //create info window variable
                 var infowindow = new google.maps.InfoWindow();
-              var content= '<p>'+ place.name +'\n' + place.photos[0] +'<p>';
+               
+              
+              var content= '<p>'+ place.name +'\n<p><\p>Phone number: '+ place.formatted_phone_number +'\n<p><\p>';
+              content += place.formatted_address +'\n<p><\p>Rating:'+place.rating;
+              
+              if(place.photos.length>0){
+              content+= '\n<p><\p> <img src=\''+ place.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100}) + '\'<p>';
+              }
+              else{
+            	  content+='<\p>';
+              }
                 google.maps.event.addListener(marker, 'mouseover', function() {
                     infowindow.setContent(content);
-                    infowindow.setContent(place.photos[0]);
+                    
                     infowindow.open(map, this);
                   });
                 google.maps.event.addListener(marker, 'mouseout', function() {
                     infowindow.close(map, this);
                   });
-    	   }
+           }
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWZ0GK_peS1EydTrwk4kRViZYA3_pjPsA&libraries=places&callback=initAutocomplete"
