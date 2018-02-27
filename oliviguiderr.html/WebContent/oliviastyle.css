@@ -57,7 +57,7 @@
       }
 
       #pac-input {
-        background-color: #fff;
+        background-color: #d9b8fe;
         font-family: Roboto;
         font-size: 15px;
         font-weight: 300;
@@ -68,12 +68,12 @@
       }
 
       #pac-input:focus {
-        border-color: #4d90fe;
+        border-color: #8000ff;
       }
 
       #title {
         color: #fff;
-        background-color: #4d90fe;
+        background-color: #8000ff;
         font-size: 25px;
         font-weight: 500;
         padding: 6px 12px;
