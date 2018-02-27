@@ -1,5 +1,5 @@
 # GuiderrExercise
-Olivia wold guiderr internship exercise
+Olivia Wolf guiderr internship exercise
 
 Website that allows the user to search for any city and displays the location of multiple restaurants in the area and their details.
 
